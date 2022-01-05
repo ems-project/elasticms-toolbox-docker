@@ -1,14 +1,12 @@
 ARG VERSION_ARG
-
-FROM docker.io/elasticms/base-php-cli-dev:7.4 as builder
-
+ARG RELEASE_ARG
+ARG BUILD_DATE_ARG
+ARG VCS_REF_ARG
 ARG ELASTICDUMP_VERSION_ARG
 ARG CERTINFO_VERSION_ARG
 ARG WEB2ELASTICMS_VERSION_ARG
 
-ARG RELEASE_ARG=""
-ARG BUILD_DATE_ARG=""
-ARG VCS_REF_ARG=""
+FROM docker.io/elasticms/base-php-cli-dev:7.4 as builder
 
 USER root
 
@@ -53,10 +51,6 @@ RUN echo "Download and build Certinfo ..." \
     && make build
 
 FROM docker.io/elasticms/base-php-cli:7.4
-
-ARG RELEASE_ARG
-ARG BUILD_DATE_ARG
-ARG VCS_REF_ARG
 
 ENV NODE_ENV production
 
