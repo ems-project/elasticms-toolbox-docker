@@ -6,6 +6,7 @@ ARG BUILD_DATE_ARG
 ARG VCS_REF_ARG
 ARG ELASTICDUMP_VERSION_ARG
 ARG CERTINFO_VERSION_ARG
+ARG ELASTICMS_CLIENT_VERSION_ARG
 ARG WEB2ELASTICMS_VERSION_ARG
 
 USER root
@@ -15,6 +16,18 @@ RUN echo "Install required build tools ..." \
     && apk add --update --no-cache go make
 
 USER 1001
+
+#
+# BUILD elasticms-client
+#
+ENV ELASTICMS_CLIENT_VERSION=${ELASTICMS_CLIENT_VERSION_ARG:-0.0.1} 
+ENV ELASTICMS_CLIENT_DOWNLOAD_URL="https://github.com/ems-project/elasticms-client/archive/refs/tags/${ELASTICMS_CLIENT_VERSION}.tar.gz" 
+
+RUN echo "Download and build elasticms-client ..." \
+    && mkdir -p /opt/src/elasticms \
+    && cd /opt/src/elasticms \
+    && curl -sSfL ${ELASTICMS_CLIENT_DOWNLOAD_URL} | tar -xzC /opt/src/elasticms --strip-components=1 \
+    && COMPOSER_MEMORY_LIMIT=-1 composer -vvvv install --no-interaction --no-suggest --no-scripts --working-dir /opt/src/elasticms -o 
 
 #
 # BUILD WebToElasticms
@@ -74,12 +87,17 @@ USER root
 
 RUN echo "Install required runtime ..." \
     && echo "Install NodeJS ..." \
-    && apk add --update --no-cache nodejs 
+    && apk add --update --no-cache nodejs tini
+
+#
+# INSTALL elasticms-client
+#
+COPY --from=builder /opt/src/elasticms /opt/src/elasticms
 
 #
 # INSTALL WebToElasticms
 #
-COPY --from=builder /opt/src/WebToElasticms-master /opt/src
+COPY --from=builder /opt/src/WebToElasticms-master /opt/src/web2ems
 
 #
 # INSTALL Elasticdump
@@ -91,6 +109,22 @@ COPY --from=builder /opt/elasticdump /usr/local
 #
 COPY --from=builder /opt/certinfo/certinfo /usr/local/bin
 
-WORKDIR /opt/src
+COPY bin/ /usr/local/bin/
+
+RUN echo "Configure container ..." \
+    && chmod +x /usr/local/bin/container-entrypoint \
+                /usr/local/bin/elasticms \
+                /usr/local/bin/web2ems \
+    && echo "Setup permissions on filesystem for non-privileged user ..." \
+    && chown -Rf 1001:0 /opt/src/elasticms /opt/src/web2ems \
+    && chmod -R ug+rw /opt/src/elasticms /opt/src/web2ems \
+    && find /opt/src/elasticms -type d -exec chmod ug+x {} \; \
+    && find /opt/src/web2ems -type d -exec chmod ug+x {} \; 
+
+WORKDIR /home/default
 
 USER 1001
+
+ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/container-entrypoint"]
+
+CMD ["/bin/sh", "-ec", "while :; do echo '.'; sleep 5 ; done"]

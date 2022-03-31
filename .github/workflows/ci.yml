@@ -112,6 +112,7 @@ jobs:
             ELASTICDUMP_VERSION_ARG=${{ env.ELASTICDUMP_VERSION }}
             CERTINFO_VERSION_ARG=${{ env.CERTINFO_VERSION }}
             WEB2ELASTICMS_VERSION_ARG=${{ env.WEB2ELASTICMS_VERSION }}
+            ELASTICMS_CLIENT_VERSION_ARG=${{ env.ELASTICMS_CLIENT_VERSION }}
           push: false
           load: true
           tags: ${{ steps.meta_ghcr.outputs.tags }}
@@ -145,6 +146,7 @@ jobs:
             ELASTICDUMP_VERSION_ARG=${{ env.ELASTICDUMP_VERSION }}
             CERTINFO_VERSION_ARG=${{ env.CERTINFO_VERSION }}
             WEB2ELASTICMS_VERSION_ARG=${{ env.WEB2ELASTICMS_VERSION }}
+            ELASTICMS_CLIENT_VERSION_ARG=${{ env.ELASTICMS_CLIENT_VERSION }}
           push: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/master' }}
           tags: ${{ steps.meta_ghcr.outputs.tags }}
           labels: ${{ steps.meta_ghcr.outputs.labels }}
@@ -164,6 +166,7 @@ jobs:
             ELASTICDUMP_VERSION_ARG=${{ env.ELASTICDUMP_VERSION }}
             CERTINFO_VERSION_ARG=${{ env.CERTINFO_VERSION }}
             WEB2ELASTICMS_VERSION_ARG=${{ env.WEB2ELASTICMS_VERSION }}
+            ELASTICMS_CLIENT_VERSION_ARG=${{ env.ELASTICMS_CLIENT_VERSION }}
           push: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/master' }}
           tags: ${{ steps.meta_dockerhub.outputs.tags }}
           labels: ${{ steps.meta_dockerhub.outputs.labels }}
