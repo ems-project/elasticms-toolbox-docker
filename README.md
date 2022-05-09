@@ -17,8 +17,8 @@ docker run -it --rm docker.io/elasticms/toolbox:latest certinfo www.google.com:4
 docker run -it --rm docker.io/elasticms/toolbox:latest elasticdump --help
 ```
 
-### [web2elasticms](https://github.com/ems-project/WebToElasticms)
+### [elasticms-client](https://github.com/ems-project/elasticms-client)
 
 ```
-docker run -it --rm docker.io/elasticms/toolbox:latest php application.php --help
+docker run -it --rm docker.io/elasticms/toolbox:latest elasticms <command>
 ```

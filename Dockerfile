@@ -7,7 +7,6 @@ ARG VCS_REF_ARG
 ARG ELASTICDUMP_VERSION_ARG
 ARG CERTINFO_VERSION_ARG
 ARG ELASTICMS_CLIENT_VERSION_ARG
-ARG WEB2ELASTICMS_VERSION_ARG
 
 USER root
 
@@ -28,17 +27,6 @@ RUN echo "Download and build elasticms-client ..." \
     && cd /opt/src/elasticms \
     && curl -sSfL ${ELASTICMS_CLIENT_DOWNLOAD_URL} | tar -xzC /opt/src/elasticms --strip-components=1 \
     && COMPOSER_MEMORY_LIMIT=-1 composer -vvvv install --no-interaction --no-suggest --no-scripts --working-dir /opt/src/elasticms -o 
-
-#
-# BUILD WebToElasticms
-#
-ENV WEB2ELASTICMS_VERSION=${WEB2ELASTICMS_VERSION_ARG:-master} \
-    WEB2ELASTICMS_DOWNLOAD_URL="https://github.com/ems-project/WebToElasticms/archive/refs/heads/master.zip" 
-
-RUN echo "Download and build WebToElasticms ..." \
-    && cd /opt/src \
-    && curl -sSfL ${WEB2ELASTICMS_DOWNLOAD_URL} | unzip - \
-    && COMPOSER_MEMORY_LIMIT=-1 composer -vvvv install --no-interaction --no-suggest --no-scripts --working-dir /opt/src/WebToElasticms-master -o 
 
 #
 # BUILD Elasticdump
@@ -93,11 +81,6 @@ RUN echo "Install required runtime ..." \
 # INSTALL elasticms-client
 #
 COPY --from=builder /opt/src/elasticms /opt/src/elasticms
-
-#
-# INSTALL WebToElasticms
-#
-COPY --from=builder /opt/src/WebToElasticms-master /opt/src/web2ems
 
 #
 # INSTALL Elasticdump
