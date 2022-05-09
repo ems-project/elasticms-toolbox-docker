@@ -96,7 +96,7 @@ COPY bin/ /usr/local/bin/
 
 RUN echo "Configure container ..." \
     && chmod +x /usr/local/bin/container-entrypoint \
-                /usr/local/bin/elasticms 
+                /usr/local/bin/elasticms \
     && echo "Setup permissions on filesystem for non-privileged user ..." \
     && chown -Rf 1001:0 /opt/src/elasticms \
     && chmod -R ug+rw /opt/src/elasticms \
