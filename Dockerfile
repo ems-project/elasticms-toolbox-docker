@@ -96,13 +96,11 @@ COPY bin/ /usr/local/bin/
 
 RUN echo "Configure container ..." \
     && chmod +x /usr/local/bin/container-entrypoint \
-                /usr/local/bin/elasticms \
-                /usr/local/bin/web2ems \
+                /usr/local/bin/elasticms 
     && echo "Setup permissions on filesystem for non-privileged user ..." \
-    && chown -Rf 1001:0 /opt/src/elasticms /opt/src/web2ems \
-    && chmod -R ug+rw /opt/src/elasticms /opt/src/web2ems \
-    && find /opt/src/elasticms -type d -exec chmod ug+x {} \; \
-    && find /opt/src/web2ems -type d -exec chmod ug+x {} \; 
+    && chown -Rf 1001:0 /opt/src/elasticms \
+    && chmod -R ug+rw /opt/src/elasticms \
+    && find /opt/src/elasticms -type d -exec chmod ug+x {} \; 
 
 WORKDIR /home/default
 

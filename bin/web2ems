@@ -1,3 +1,0 @@
-#!/bin/bash
-
-php -d memory_limit=${CLI_PHP_MEMORY_LIMIT:-512M} /opt/src/web2ems/application.php $@
