@@ -20,7 +20,7 @@ USER 1001
 # BUILD elasticms-client
 #
 ENV ELASTICMS_CLIENT_VERSION=${ELASTICMS_CLIENT_VERSION_ARG:-0.0.1} 
-ENV ELASTICMS_CLIENT_DOWNLOAD_URL="https://github.com/ems-project/elasticms-client/archive/refs/tags/${ELASTICMS_CLIENT_VERSION}.tar.gz" 
+ENV ELASTICMS_CLIENT_DOWNLOAD_URL="https://github.com/ems-project/elasticms-cli/archive/refs/tags/${ELASTICMS_CLIENT_VERSION}.tar.gz" 
 
 RUN echo "Download and build elasticms-client ..." \
     && mkdir -p /opt/src/elasticms \
